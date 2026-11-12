@@ -1,0 +1,27 @@
+{
+  "materials": {
+    "ground": {"color": [0.55, 0.54, 0.52], "roughness": 0.8},
+    "clay": {"color": [0.8, 0.35, 0.15], "roughness": 0.45},
+    "steel": {"color": [0.6, 0.61, 0.63], "metallic": 1.0, "roughness": 0.25},
+    "gold": {"color": [0.83, 0.62, 0.22], "metallic": 1.0, "roughness": 0.35},
+    "glass": {"color": [0.3, 0.55, 0.9], "roughness": 0.1, "opacity": 0.4},
+    "ink": {"color": [0.03, 0.03, 0.04]},
+    "wire": {"color": [0.9, 0.7, 0.03], "roughness": 0.45},
+    "lamp": {"color": [1, 1, 1], "emission": [2.0, 1.6, 0.8]}
+  },
+  "objects": [
+    {"name": "ground", "shape": "plane", "size": [400, 400], "material": "ground"},
+    {"name": "block", "shape": "box", "size": [40, 30, 20], "radius": 3, "position": [-35, 10, 10], "rotation": [0, 0, 20], "material": "clay"},
+    {"name": "post", "shape": "cylinder", "radius": 8, "radius_top": 4, "height": 30, "position": [5, 25, 15], "material": "steel"},
+    {"name": "ball", "shape": "sphere", "radius": 10, "position": [30, -5, 10], "material": "glass"},
+    {"name": "egg", "shape": "sphere", "radius": 6, "scale": [1, 1, 1.5], "position": [8, -20, 9], "material": "gold"},
+    {"name": "ring", "shape": "torus", "major": 12, "minor": 3, "position": [-20, -30, 3], "material": "gold"},
+    {"name": "label", "shape": "text", "text": "Paper Mache", "size": 4.5, "position": [-35, 10, 20.05], "rotation": [0, 0, 20], "material": "ink"},
+    {"name": "wire", "shape": "tube", "radius": 1.2, "points": [[-50, -20, 1.2], [-40, -45, 8], [0, -45, 8], [20, -30, 1.2]], "material": "wire"},
+    {"name": "bulb", "shape": "sphere", "radius": 3, "position": [45, 30, 3], "material": "lamp"}
+  ],
+  "camera": {"eye": [60, -140, 90], "look": [-2, -5, 6], "lens": 50, "size": [1200, 800]},
+  "lights": {"sun": {"direction": [0.45, -0.35, 0.82], "angle": 8, "strength": 2.0}, "sky": {"color": [1, 1, 1], "strength": 0.7}},
+  "render": {"samples": 32},
+  "points": {"label": [-35, 10, 20], "ball": [30, -5, 10]}
+}

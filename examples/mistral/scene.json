@@ -1,0 +1,139 @@
+{
+  "materials": {
+    "ground": {
+      "color": [
+        0.93,
+        0.93,
+        0.92
+      ],
+      "metallic": 0.0,
+      "roughness": 0.85,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "opacity": 1.0
+    },
+    "logo": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "metallic": 0.0,
+      "roughness": 0.45,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "opacity": 1.0
+    }
+  },
+  "objects": [
+    {
+      "name": "mistral-logo",
+      "shape": "image",
+      "file": "examples/mistral/logo.png",
+      "width": 150.0,
+      "depth": 6.0,
+      "key": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "detail": 4,
+      "position": [
+        0.0,
+        0.0,
+        3.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "material": "logo",
+      "tags": [
+        "logo"
+      ]
+    },
+    {
+      "name": "ground",
+      "shape": "box",
+      "size": [
+        800.0,
+        800.0,
+        1.0
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -0.5
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "material": "ground"
+    }
+  ],
+  "camera": {
+    "eye": [
+      -45.0,
+      -150.0,
+      140.0
+    ],
+    "look": [
+      2.0,
+      2.0,
+      0.0
+    ],
+    "projection": "perspective",
+    "lens": 46.0,
+    "width": 100.0,
+    "size": [
+      2000,
+      1150
+    ]
+  },
+  "lights": {
+    "sun": {
+      "direction": [
+        -0.45,
+        -0.55,
+        0.7
+      ],
+      "angle": 9.0,
+      "strength": 1.9
+    },
+    "sky": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "strength": 0.75
+    },
+    "background": [
+      1,
+      1,
+      1
+    ]
+  },
+  "render": {
+    "samples": 16
+  }
+}
