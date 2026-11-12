@@ -1,6 +1,6 @@
 [package]
 name = "papermache"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "3d model design, via mcp (rust)"
 license = "MIT"
@@ -14,6 +14,7 @@ rayon = "1.12"
 png = "0.17.16"
 ab_glyph = "0.2.32"
 base64 = "0.22.1"
+tiny_http = "0.12"
 
 [profile.release]
 opt-level = 3

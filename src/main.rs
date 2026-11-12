@@ -5,6 +5,7 @@ use serde_json::{json, Map, Value};
 
 const USAGE: &str = "Paper Mache: 3d model design, via mcp (rust)
 
+  papermache                      the editor in your browser (also: papermache edit [scene.json] [--port N] [--no-open])
   papermache render <scene.json> -o <out.png> [--samples N] [--scale F]
   papermache export <scene.json> -o <model.obj|model.stl> [--tag T]
   papermache info <scene.json>
@@ -19,6 +20,11 @@ fn run(args: &[String]) -> Result<(), String> {
     let cmd = args.first().map(String::as_str).unwrap_or("");
     let scene = || Scene::load(args.get(1).ok_or(USAGE)?);
     match cmd {
+        "" | "edit" => {
+            let file = args.get(1).filter(|a| !a.starts_with("--")).cloned();
+            let port = flag(args, "--port").and_then(|p| p.parse().ok()).unwrap_or(7820);
+            papermache::editor::run(file, port, !args.iter().any(|a| a == "--no-open"))?
+        }
         "mcp" => papermache::mcp::run_stdio(),
         "--version" | "-V" => println!("papermache {}", env!("CARGO_PKG_VERSION")),
         "render" => {

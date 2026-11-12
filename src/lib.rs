@@ -1,5 +1,6 @@
 //! Paper Mache: 3d model design, via mcp (rust).
 pub mod bvh;
+pub mod editor;
 pub mod geom;
 pub mod image;
 pub mod math;

@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper Mache</title>
+<style>
+:root { --canvas:#f4f4f1; --surface:#fdfdfc; --line:#dcdcd7; --ink:#202020; --muted:#5f5f5c; --sea:#187c49; --sea-ink:#156f41; --sea-wash:#daf3e1; --bad:#b3261e; }
+* { box-sizing:border-box; }
+html, body { height:100%; margin:0; }
+body { font:13px/1.45 system-ui, "Segoe UI", sans-serif; color:var(--ink); background:var(--canvas); display:grid; grid-template-rows:46px 1fr 26px; grid-template-columns:230px 1fr 310px; grid-template-areas:"top top top" "left view right" "foot foot foot"; }
+header { grid-area:top; display:flex; align-items:center; gap:6px; padding:0 10px; border-bottom:1px solid var(--line); background:var(--surface); }
+header b { font-size:15px; margin-right:10px; }
+#file { flex:0 1 340px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+button, select, input { font:inherit; color:inherit; }
+button { border:1px solid rgba(0,0,0,.14); background:var(--surface); border-radius:7px; padding:4px 10px; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,.06); }
+button:hover { border-color:var(--sea); }
+button.go { background:var(--sea); color:#fff; border-color:#136a3e; }
+aside { overflow:auto; background:var(--surface); padding:10px; }
+#left { grid-area:left; border-right:1px solid var(--line); }
+#right { grid-area:right; border-left:1px solid var(--line); }
+h3 { margin:12px 0 6px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+.adds { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; }
+.adds button { padding:4px 2px; font-size:12px; }
+#list div { display:flex; align-items:center; gap:6px; padding:4px 6px; border-radius:6px; cursor:pointer; }
+#list div:hover { background:var(--canvas); }
+#list div.on { background:var(--sea-wash); color:var(--sea-ink); }
+#list span { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#list small { color:var(--muted); }
+#view { grid-area:view; position:relative; overflow:hidden; background:#e9e9e5; cursor:grab; }
+#view img, #view canvas { position:absolute; inset:0; width:100%; height:100%; }
+#view canvas { pointer-events:none; }
+#busy { position:absolute; right:10px; top:8px; font-size:11px; color:var(--muted); background:rgba(255,255,255,.8); padding:2px 8px; border-radius:99px; }
+footer { grid-area:foot; display:flex; gap:16px; align-items:center; padding:0 10px; border-top:1px solid var(--line); background:var(--surface); color:var(--muted); font-size:12px; }
+#err { color:var(--bad); }
+.row { display:grid; grid-template-columns:86px 1fr; gap:6px; align-items:center; margin:4px 0; }
+.row label { color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
+.row input[type=text], .row input[type=number], .row select, .row textarea { width:100%; min-width:0; border:1px solid var(--line); border-radius:6px; padding:3px 6px; background:#fff; }
+.trio { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
+.duo { display:grid; grid-template-columns:repeat(2,1fr); gap:4px; }
+textarea { font:12px/1.4 ui-monospace, Consolas, monospace; }
+#json { position:fixed; inset:60px 15%; background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.25); padding:12px; display:none; flex-direction:column; gap:8px; z-index:9; }
+#json textarea { flex:1; width:100%; border:1px solid var(--line); border-radius:8px; padding:8px; }
+kbd { font:11px ui-monospace, Consolas, monospace; border:1px solid var(--line); border-radius:4px; padding:0 4px; background:#fff; }
+</style>
+</head>
+<body>
+<header>
+  <b>Paper Mache</b>
+  <button id="b-open" title="Open a scene file">Open</button>
+  <button id="b-save" title="Ctrl+S">Save</button>
+  <span id="file">new scene</span>
+  <button id="b-undo" title="Ctrl+Z">Undo</button>
+  <button id="b-redo" title="Ctrl+Y">Redo</button>
+  <span style="flex:1"></span>
+  <button id="b-json" title="Edit the whole scene, or the selected object, as JSON">JSON</button>
+  <button id="b-export" title="Export .stl or .obj">Export</button>
+  <button id="b-render" class="go" title="Render at the camera's size and samples">Render</button>
+</header>
+<aside id="left">
+  <h3>Add</h3>
+  <div class="adds" id="adds"></div>
+  <h3>Objects</h3>
+  <div id="list"></div>
+</aside>
+<main id="view"><img id="img" alt=""><canvas id="over"></canvas><span id="busy"></span></main>
+<aside id="right"><div id="props"></div></aside>
+<footer><span id="stat"></span><span id="err"></span><span style="flex:1"></span><span>drag orbit · right-drag pan · wheel zoom · click select · <kbd>←↑→↓</kbd> move · <kbd>PgUp</kbd><kbd>PgDn</kbd> up/down · <kbd>Q</kbd><kbd>E</kbd> turn · <kbd>F</kbd> frame · <kbd>Del</kbd> · <kbd>Ctrl+D</kbd></span></footer>
+<div id="json"><b id="json-title">Scene JSON</b><textarea id="json-text" spellcheck="false"></textarea><div><button class="go" id="json-apply">Apply</button> <button id="json-close">Close</button></div></div>
+<input type="file" id="pick-png" accept=".png,image/png" hidden>
+<script>
+const $ = (id) => document.getElementById(id);
+const SHAPES = {
+  box: { size: [20, 20, 20], radius: 0 }, cylinder: { radius: 10, radius_top: 10, height: 20 }, sphere: { radius: 10 },
+  torus: { major: 12, minor: 3 }, plane: { size: [120, 120] }, text: { text: "Paper Mache", size: 10, align: "center" },
+  rod: { from: [0, 0, 0], to: [0, 0, 30], radius: 3, radius_top: 3 }, tube: { points: [[0, 0, 5], [20, 0, 15], [40, 0, 5]], radius: 2 },
+  image: { file: "", width: 100, depth: 5, key: [1, 1, 1], detail: 4 },
+};
+let scene = null, path = null, version = 0, sel = -1, boxes = [], dirty = false, gen = 0, level = 0, busy = false, undo = [], redo = [];
+const LEVELS = [[0.35, 1], [1, 2], [1, 8], [1, 32]];
+
+async function api(url, opt = {}) {
+  const r = await fetch(url, opt);
+  const t = r.headers.get("content-type") || "";
+  const v = t.includes("json") ? await r.json() : r;
+  if (!r.ok) throw new Error((v && v.error) || r.statusText);
+  return v;
+}
+const post = (url, body) => api(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+const err = (e) => { $("err").textContent = e ? String(e.message || e) : ""; };
+
+async function load() {
+  const v = await api("/api/scene");
+  scene = v.scene; path = v.path; version = v.version;
+  boxes = await api("/api/bounds");
+  $("file").textContent = path || "new scene (Save asks for a file)";
+  sel = Math.min(sel, scene.objects.length - 1);
+  ui(); changed(false);
+}
+function snap() { undo.push(JSON.stringify(scene)); if (undo.length > 200) undo.shift(); redo = []; }
+function edit(fn) { snap(); fn(); dirty = true; ui(); changed(); }
+function changed(mark = true) { if (mark) dirty = true; gen++; level = 0; pump(); }
+
+async function pump() {
+  if (busy || level >= LEVELS.length || !scene) return;
+  busy = true;
+  const g = gen, [k, s] = LEVELS[level], view = $("view");
+  try {
+    if (dirty) { dirty = false; const v = await post("/api/scene", scene); version = v.version; err(); boxes = await api("/api/bounds"); }
+    const w = Math.max(16, Math.round(view.clientWidth * k * Math.min(devicePixelRatio, 1.5))), h = Math.max(16, Math.round(view.clientHeight * k * Math.min(devicePixelRatio, 1.5)));
+    $("busy").textContent = level < LEVELS.length - 1 ? "drawing…" : "";
+    const r = await fetch(`/api/render?w=${w}&h=${h}&s=${s}`);
+    if (!r.ok) throw new Error((await r.json()).error);
+    const url = URL.createObjectURL(await r.blob());
+    const img = $("img"), old = img.src;
+    img.src = url; if (old) URL.revokeObjectURL(old);
+    $("stat").textContent = `${scene.objects.length} objects · ${w}×${h} · ${s} spp · ${r.headers.get("X-Ms")} ms`;
+    overlay();
+  } catch (e) { err(e); dirty = false; }
+  busy = false;
+  if (g === gen) level++; else level = 0;
+  if (level >= LEVELS.length) $("busy").textContent = "";
+  pump();
+}
+
+function cam(w, h) {
+  const c = scene.camera, sub = (a, b) => a.map((x, i) => x - b[i]), dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = (a) => { const l = Math.hypot(...a) || 1; return a.map((x) => x / l); };
+  const f = norm(sub(c.look, c.eye));
+  let up = c.up || [0, 0, 1];
+  for (const alt of [[0, 1, 0], [1, 0, 0]]) if (Math.hypot(...cross(f, up)) < 1e-9) up = alt;
+  const r = norm(cross(f, up)), u = cross(r, f), ortho = (c.projection || "").startsWith("ortho");
+  const half = ortho ? c.width / 2 : c.fov ? Math.tan((c.fov * Math.PI) / 360) : 18 / (c.lens || 50);
+  const [sx, sy] = w >= h ? [half, (half * h) / w] : [(half * w) / h, half];
+  return { f, r, u, ortho, sx, sy, project(p) {
+    const v = sub(p, c.eye); let x = dot(v, r), y = dot(v, u);
+    if (!ortho) { const z = dot(v, f); if (z <= 1e-6) return null; x /= z; y /= z; }
+    return [((x / sx + 1) / 2) * w, ((1 - y / sy) / 2) * h];
+  } };
+}
+function overlay() {
+  const cv = $("over"), w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w; cv.height = h;
+  const g = cv.getContext("2d");
+  g.clearRect(0, 0, w, h);
+  const b = boxes[sel];
+  if (!b || !scene.objects[sel] || b[0][0] > b[1][0]) return;
+  const c = cam(w, h), corner = (i) => [b[i & 1][0], b[(i >> 1) & 1][1], b[(i >> 2) & 1][2]];
+  g.strokeStyle = "#187c49"; g.lineWidth = 1.5; g.setLineDash([5, 4]);
+  for (let i = 0; i < 8; i++) for (const bit of [1, 2, 4]) {
+    if (i & bit) continue;
+    const p = c.project(corner(i)), q = c.project(corner(i | bit));
+    if (p && q) { g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); }
+  }
+}
+
+function lin2hex(c) { return "#" + c.map((v) => { v = Math.max(0, Math.min(1, v)); const s = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055; return Math.round(s * 255).toString(16).padStart(2, "0"); }).join(""); }
+function hex2lin(h) { return [1, 3, 5].map((i) => { const s = parseInt(h.slice(i, i + 2), 16) / 255; return +(s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4)).toFixed(4); }); }
+
+function row(label, el) { const d = document.createElement("div"); d.className = "row"; const l = document.createElement("label"); l.textContent = label; l.title = label; d.append(l, el); return d; }
+function input(type, value, onchange, step) {
+  const i = document.createElement("input"); i.type = type; i.value = value; if (step) i.step = step;
+  i.onfocus = () => snap();
+  i.oninput = () => { onchange(type === "number" ? parseFloat(i.value) || 0 : i.value); dirty = true; changed(); };
+  i.onkeydown = (e) => e.stopPropagation();
+  return i;
+}
+function vec(arr, onchange) {
+  const d = document.createElement("div"); d.className = arr.length === 3 ? "trio" : "duo";
+  arr.forEach((v, k) => d.append(input("number", v, (x) => { arr[k] = x; onchange(arr); }, 0.1)));
+  return d;
+}
+function field(obj, key, box) {
+  const v = obj[key];
+  if (key === "shape") return;
+  if (key === "material") {
+    const s = document.createElement("select");
+    for (const m of ["", ...Object.keys(scene.materials)]) s.append(new Option(m || "(default grey)", m));
+    s.value = v || ""; s.onchange = () => edit(() => { obj.material = s.value; });
+    return box.append(row("material", s));
+  }
+  if (key === "hidden") { const c = input("checkbox", "", () => {}); c.checked = !!v; c.oninput = () => edit(() => { obj.hidden = c.checked; }); return box.append(row(key, c)); }
+  if (key === "tags") return box.append(row(key, input("text", (v || []).join(", "), (x) => { obj.tags = x.split(",").map((t) => t.trim()).filter(Boolean); })));
+  if (key === "align") { const s = document.createElement("select"); for (const a of ["center", "left", "right"]) s.append(new Option(a, a)); s.value = v; s.onchange = () => edit(() => { obj.align = s.value; }); return box.append(row(key, s)); }
+  if (typeof v === "number") return box.append(row(key, input("number", v, (x) => { obj[key] = x; }, 0.1)));
+  if (typeof v === "string") return box.append(row(key, input("text", v, (x) => { obj[key] = x; })));
+  if (Array.isArray(v) && v.every((x) => typeof x === "number") && (v.length === 2 || v.length === 3)) {
+    if (key === "key" || key === "color" || key === "emission") { const c = input("color", lin2hex(v), (x) => { obj[key] = hex2lin(x); }); return box.append(row(key, c)); }
+    return box.append(row(key, vec(v, (a) => { obj[key] = a; })));
+  }
+  const t = document.createElement("textarea"); t.rows = 4; t.value = JSON.stringify(v);
+  t.onfocus = () => snap(); t.onkeydown = (e) => e.stopPropagation();
+  t.oninput = () => { try { obj[key] = JSON.parse(t.value); t.style.borderColor = ""; dirty = true; changed(); } catch { t.style.borderColor = "#b3261e"; } };
+  box.append(row(key, t));
+}
+function material(name, box) {
+  const m = scene.materials[name];
+  if (!m) return;
+  for (const [k, d] of [["color", [0.8, 0.8, 0.8]], ["metallic", 0], ["roughness", 0.5], ["opacity", 1], ["emission", [0, 0, 0]]]) if (m[k] === undefined) m[k] = d;
+  for (const k of Object.keys(m)) field(m, k, box);
+}
+
+function ui() {
+  const list = $("list"); list.textContent = "";
+  scene.objects.forEach((o, i) => {
+    const d = document.createElement("div"); d.className = i === sel ? "on" : "";
+    const eye = document.createElement("input"); eye.type = "checkbox"; eye.checked = !o.hidden; eye.title = "Shown";
+    eye.onclick = (e) => { e.stopPropagation(); edit(() => { o.hidden = !eye.checked; }); };
+    const n = document.createElement("span"); n.textContent = o.name || "(unnamed)";
+    const k = document.createElement("small"); k.textContent = o.shape;
+    d.append(eye, n, k); d.onclick = () => select(i); list.append(d);
+  });
+  const p = $("props"); p.textContent = "";
+  const o = scene.objects[sel];
+  if (o) {
+    const h = document.createElement("h3"); h.textContent = `${o.shape}: ${o.name}`; p.append(h);
+    for (const [k, d] of Object.entries({ position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1], material: "", tags: [], hidden: false, ...SHAPES[o.shape] })) if (o[k] === undefined) o[k] = structuredClone(d);
+    for (const k of ["name", ...Object.keys(o).filter((k) => k !== "name")]) field(o, k, p);
+    const bar = document.createElement("div"); bar.style.cssText = "display:flex;gap:6px;margin:10px 0";
+    for (const [t, f] of [["Duplicate", dup], ["Delete", del], ["Frame", frame]]) { const b = document.createElement("button"); b.textContent = t; b.onclick = f; bar.append(b); }
+    p.append(bar);
+    if (o.material && scene.materials[o.material]) { const m = document.createElement("h3"); m.textContent = `material: ${o.material}`; p.append(m); material(o.material, p); }
+    else { const b = document.createElement("button"); b.textContent = "New material for it"; b.onclick = () => edit(() => { const n = `${o.name}-mat`; scene.materials[n] = { color: [0.8, 0.8, 0.8], metallic: 0, roughness: 0.5 }; o.material = n; }); p.append(b); }
+    return;
+  }
+  const h = document.createElement("h3"); h.textContent = "Camera"; p.append(h);
+  const c = scene.camera;
+  for (const [k, d] of [["eye", [80, -160, 120]], ["look", [0, 0, 0]], ["projection", "perspective"], ["lens", 50], ["width", 100], ["size", [1600, 1200]]]) if (c[k] === undefined) c[k] = d;
+  const pr = document.createElement("select"); for (const a of ["perspective", "orthographic"]) pr.append(new Option(a, a)); pr.value = c.projection; pr.onchange = () => edit(() => { c.projection = pr.value; });
+  p.append(row("projection", pr)); for (const k of ["eye", "look", "lens", "width", "size"]) field(c, k, p);
+  const l = scene.lights; l.sun = l.sun || { direction: [0.45, -0.35, 0.82], angle: 8, strength: 1.7 }; l.sky = l.sky || { color: [1, 1, 1], strength: 0.7 };
+  const hs = document.createElement("h3"); hs.textContent = "Sun and sky"; p.append(hs);
+  for (const k of ["direction", "angle", "strength"]) field(l.sun, k, p);
+  field(l.sky, "color", p); p.lastChild.firstChild.textContent = "sky colour"; field(l.sky, "strength", p); p.lastChild.firstChild.textContent = "sky strength";
+  const bg = document.createElement("select"); bg.append(new Option("sky", "sky"), new Option("white", "white"), new Option("transparent", "transparent"));
+  bg.value = l.background === "transparent" ? "transparent" : Array.isArray(l.background) ? "white" : "sky";
+  bg.onchange = () => edit(() => { if (bg.value === "sky") delete l.background; else l.background = bg.value === "white" ? [1, 1, 1] : "transparent"; });
+  p.append(row("background", bg));
+  scene.render = scene.render || { samples: 16 }; field(scene.render, "samples", p); p.lastChild.firstChild.textContent = "final samples";
+  const hm = document.createElement("h3"); hm.textContent = "Materials"; p.append(hm);
+  for (const name of Object.keys(scene.materials)) { const t = document.createElement("h3"); t.textContent = name; t.style.textTransform = "none"; p.append(t); material(name, p); }
+  const nb = document.createElement("button"); nb.textContent = "New material"; nb.onclick = () => { const n = prompt("Material name", "clay"); if (n) edit(() => { scene.materials[n] = { color: [0.8, 0.35, 0.15], metallic: 0, roughness: 0.5 }; }); }; p.append(nb);
+}
+
+function select(i) { sel = i; ui(); overlay(); }
+function addShape(shape, extra = {}) {
+  edit(() => {
+    if (!scene.materials.clay) scene.materials.clay = { color: [0.8, 0.35, 0.15], metallic: 0, roughness: 0.5 };
+    const used = new Set(scene.objects.map((o) => o.name)); let n = 1; while (used.has(`${shape}${n}`)) n++;
+    scene.objects.push({ name: `${shape}${n}`, shape, ...structuredClone(SHAPES[shape]), ...extra, position: [...scene.camera.look], material: "clay" });
+    sel = scene.objects.length - 1;
+  });
+}
+function dup() { const o = scene.objects[sel]; if (!o) return; edit(() => { const c = structuredClone(o); c.name = `${o.name}.copy`; c.position = [o.position[0] + 10, o.position[1] + 10, o.position[2]]; scene.objects.push(c); sel = scene.objects.length - 1; }); }
+function del() { if (sel < 0) return; edit(() => { scene.objects.splice(sel, 1); sel = Math.min(sel, scene.objects.length - 1); }); }
+function frame() {
+  const b = boxes[sel]; if (!b) return;
+  const mid = [0, 1, 2].map((k) => (b[0][k] + b[1][k]) / 2), size = Math.max(...[0, 1, 2].map((k) => b[1][k] - b[0][k]), 1);
+  edit(() => { const c = scene.camera, d = c.eye.map((x, k) => x - c.look[k]), l = Math.hypot(...d); c.look = mid; c.eye = mid.map((x, k) => x + (d[k] / l) * size * 3); if ((c.projection || "").startsWith("ortho")) c.width = size * 1.6; });
+}
+
+for (const s of Object.keys(SHAPES)) {
+  const b = document.createElement("button"); b.textContent = s;
+  b.onclick = () => (s === "image" ? $("pick-png").click() : addShape(s));
+  $("adds").append(b);
+}
+$("pick-png").onchange = async () => {
+  const f = $("pick-png").files[0]; if (!f) return;
+  try { const v = await api(`/api/upload?name=${encodeURIComponent(f.name)}`, { method: "POST", body: f }); addShape("image", { file: v.file }); } catch (e) { err(e); }
+  $("pick-png").value = "";
+};
+
+const view = $("view");
+let drag = null;
+view.oncontextmenu = (e) => e.preventDefault();
+view.onmousedown = (e) => { drag = { x: e.clientX, y: e.clientY, moved: false, pan: e.button === 2 || e.shiftKey, snap: false }; };
+addEventListener("mouseup", async (e) => {
+  if (!drag) return;
+  const d = drag; drag = null; view.style.cursor = "";
+  if (d.moved) return;
+  const r = view.getBoundingClientRect();
+  try { const v = await post("/api/pick", { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height }); select(v.index ?? -1); } catch (x) { err(x); }
+});
+addEventListener("mousemove", (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+  if (!drag.snap) { snap(); drag.snap = true; }
+  drag.moved = true; drag.x = e.clientX; drag.y = e.clientY; view.style.cursor = "grabbing";
+  const c = scene.camera, off = c.eye.map((x, k) => x - c.look[k]), dist = Math.hypot(...off);
+  if (drag.pan) {
+    const k = cam(view.clientWidth, view.clientHeight), s = k.ortho ? c.width / view.clientWidth : (dist * 2 * k.sx) / view.clientWidth;
+    const mv = [0, 1, 2].map((i) => (-dx * k.r[i] + dy * k.u[i]) * s);
+    c.eye = c.eye.map((x, i) => x + mv[i]); c.look = c.look.map((x, i) => x + mv[i]);
+  } else {
+    let az = Math.atan2(off[1], off[0]) - dx * 0.008, el = Math.asin(Math.max(-1, Math.min(1, off[2] / dist))) + dy * 0.008;
+    el = Math.max(-1.55, Math.min(1.55, el)); delete c.up;
+    c.eye = [c.look[0] + dist * Math.cos(el) * Math.cos(az), c.look[1] + dist * Math.cos(el) * Math.sin(az), c.look[2] + dist * Math.sin(el)];
+  }
+  changed();
+});
+view.onwheel = (e) => {
+  e.preventDefault();
+  const c = scene.camera, k = Math.pow(1.0015, e.deltaY);
+  if ((c.projection || "").startsWith("ortho")) c.width *= k; else c.eye = c.eye.map((x, i) => c.look[i] + (x - c.look[i]) * k);
+  changed();
+};
+
+addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+  const ctrl = e.ctrlKey || e.metaKey, o = scene && scene.objects[sel];
+  if (ctrl && e.key === "z") { e.preventDefault(); return doUndo(); }
+  if (ctrl && (e.key === "y" || (e.shiftKey && e.key === "Z"))) { e.preventDefault(); return doRedo(); }
+  if (ctrl && e.key === "s") { e.preventDefault(); return save(); }
+  if (ctrl && e.key === "d") { e.preventDefault(); return dup(); }
+  if (e.key === "Escape") return select(-1);
+  if (!o) return;
+  const step = e.shiftKey ? 10 : e.altKey ? 0.1 : 1, move = { ArrowLeft: [-1, 0, 0], ArrowRight: [1, 0, 0], ArrowUp: [0, 1, 0], ArrowDown: [0, -1, 0], PageUp: [0, 0, 1], PageDown: [0, 0, -1] }[e.key];
+  if (move) { e.preventDefault(); return edit(() => { o.position = o.position.map((x, i) => +(x + move[i] * step).toFixed(4)); }); }
+  if (e.key === "q" || e.key === "e") return edit(() => { o.rotation[2] = (o.rotation[2] || 0) + (e.key === "q" ? 15 : -15); });
+  if (e.key === "Delete" || e.key === "Backspace") return del();
+  if (e.key === "f") return frame();
+});
+function doUndo() { if (!undo.length) return; redo.push(JSON.stringify(scene)); scene = JSON.parse(undo.pop()); sel = Math.min(sel, scene.objects.length - 1); ui(); changed(); }
+function doRedo() { if (!redo.length) return; undo.push(JSON.stringify(scene)); scene = JSON.parse(redo.pop()); ui(); changed(); }
+async function save() {
+  try {
+    const p = path || prompt("Save the scene as (a .json file path)", "scene.json"); if (!p) return;
+    if (dirty) { dirty = false; version = (await post("/api/scene", scene)).version; }
+    const v = await post("/api/save", { path: p }); path = v.saved; $("file").textContent = path; err(); $("stat").textContent = `saved ${path}`;
+  } catch (e) { err(e); }
+}
+$("b-undo").onclick = doUndo; $("b-redo").onclick = doRedo; $("b-save").onclick = save;
+$("b-open").onclick = async () => { const p = prompt("Open a scene (.json file path)", path || ""); if (!p) return; try { await post("/api/open", { path: p }); sel = -1; undo = []; redo = []; await load(); } catch (e) { err(e); } };
+$("b-export").onclick = async () => { const p = prompt("Export to (.stl or .obj path)", (path || "scene.json").replace(/\.json$/i, ".stl")); if (!p) return; try { if (dirty) { dirty = false; await post("/api/scene", scene); } const v = await post("/api/export", { path: p }); $("stat").textContent = v.done; err(); } catch (e) { err(e); } };
+$("b-render").onclick = async () => {
+  const [w, h] = scene.camera.size || [1600, 1200], s = (scene.render || {}).samples || 16, tab = open("", "_blank");
+  if (tab) tab.document.body.textContent = `Rendering ${w}×${h} at ${s} samples…`;
+  try { if (dirty) { dirty = false; await post("/api/scene", scene); } const r = await fetch(`/api/render?w=${w}&h=${h}&s=${s}`); const url = URL.createObjectURL(await r.blob()); if (tab) tab.location = url; } catch (e) { err(e); }
+};
+$("b-json").onclick = () => { const o = scene.objects[sel]; $("json-title").textContent = o ? `Object ${o.name} as JSON` : "Scene JSON"; $("json-text").value = JSON.stringify(o || scene, null, 1); $("json").style.display = "flex"; };
+$("json-close").onclick = () => { $("json").style.display = "none"; };
+$("json-text").onkeydown = (e) => e.stopPropagation();
+$("json-apply").onclick = () => { try { const v = JSON.parse($("json-text").value); edit(() => { if (scene.objects[sel]) scene.objects[sel] = v; else scene = v; }); $("json").style.display = "none"; } catch (e) { err(e); } };
+addEventListener("resize", () => changed(false));
+setInterval(async () => { if (dirty || busy || drag) return; try { const v = await api("/api/version"); if (v.version > version) await load(); } catch {} }, 1000);
+load().catch(err);
+</script>
+</body>
+</html>

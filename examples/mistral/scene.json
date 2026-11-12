@@ -35,7 +35,7 @@
     {
       "name": "mistral-logo",
       "shape": "image",
-      "file": "examples/mistral/logo.png",
+      "file": "logo.png",
       "width": 150.0,
       "depth": 6.0,
       "key": [

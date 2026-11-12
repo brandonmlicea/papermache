@@ -1,7 +1,7 @@
 # Paper Mache
 
-**3d model design, via mcp (rust).** Paper Mache is a small, fully open-source 3D modeler and renderer that a coding
-agent drives over MCP: it adds shapes, sets materials, aims the camera, renders, looks at the picture and refines, then
+**3d model design, via mcp (rust).** Paper Mache is a small, fully open-source 3D modeler and renderer, with an editor you drive by hand and an MCP server a coding
+agent drives: it adds shapes, sets materials, aims the camera, renders, looks at the picture and refines, then
 saves the scene, exports it for printing or renders it again from the command line. It replaces Blender for our
 build-step pictures: one binary, no Python, no GPU, no add-on.
 
@@ -29,9 +29,25 @@ cargo build --release          # target/release/papermache(.exe)
 cargo test --release
 ```
 
+## The editor
+
+Run `papermache` with nothing after it (or double-click `papermache.exe`), or `papermache edit scene.json`: the editor
+opens in your browser on 127.0.0.1, drawn live by Paper Mache's own renderer, sharper the longer you look.
+
+- Drag to orbit, right-drag (or Shift-drag) to pan, the wheel to zoom; click an object to select it.
+- Arrow keys and PageUp/PageDown move the selection 1 mm (Shift 10, Alt 0.1), Q and E turn it 15 degrees, F frames it,
+  Delete removes it, Ctrl+D duplicates it, Ctrl+Z and Ctrl+Y undo and redo, Ctrl+S saves, Esc clears the selection.
+- Every field of the selected object, its material (colour, metal, roughness, see-through, glow), the camera, the sun,
+  the sky and the background, edited in the side panel; JSON edits the object or the whole scene as text.
+- Add any shape; `image` asks for a `.png` and raises it into a solid. Render opens the full-size picture in a new
+  tab; Export writes `.stl` or `.obj`.
+- The same scene answers MCP at `http://127.0.0.1:7820/mcp`, so a coding agent can edit while you watch: point Claude
+  Code at it with `{"type": "http", "url": "http://127.0.0.1:7820/mcp"}`. Requests from other websites are refused.
+
 ## Command line
 
 ```sh
+papermache [edit scene.json] [--port N] [--no-open]               # the editor in your browser
 papermache render scene.json -o out.png [--samples N] [--scale F]   # prints one JSON line: file, size, ms, points
 papermache export scene.json -o model.obj [--tag T]                 # or model.stl; .obj writes a .mtl beside it
 papermache info scene.json                                          # counts, bounds, materials
@@ -119,6 +135,7 @@ on stdin and stdout and keeps one scene in memory for the session.
 | `src/image.rs` | Pictures raised into solids: coverage, colours, the grid walk |
 | `src/mesh.rs` | `.obj`/`.stl` in, tessellation and `.obj`/`.stl` out |
 | `src/mcp.rs`, `src/tools.rs` | The MCP server and its tool schemas |
+| `src/editor.rs`, `src/editor.html` | The editor: a local page and its server, sharing one live scene with MCP |
 | `src/main.rs` | The command line |
 | `examples/hello.json` | Every shape on one ground plane |
 | `examples/mistral/` | A logo copied exactly into 3D, its colours checked with oklch (`examples/mistral/README.md`) |

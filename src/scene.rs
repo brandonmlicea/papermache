@@ -229,8 +229,29 @@ pub struct Scene {
     pub points: BTreeMap<String, [f64; 3]>,
 }
 
+static BASE: std::sync::RwLock<Option<std::path::PathBuf>> = std::sync::RwLock::new(None);
+
+/// A shape's `file`: as given if it exists, else beside the scene file last loaded or saved.
+pub fn resolve(file: &str) -> String {
+    let p = std::path::Path::new(file);
+    if p.is_absolute() || p.exists() {
+        return file.to_string();
+    }
+    match BASE.read().unwrap().as_ref().map(|b| b.join(p)) {
+        Some(q) if q.exists() => q.to_string_lossy().into_owned(),
+        _ => file.to_string(),
+    }
+}
+
+/// Relative files in scenes are read beside this scene file from now on.
+pub fn set_base(scene_path: &str) {
+    let dir = std::path::Path::new(scene_path).parent().map(|d| d.to_path_buf());
+    *BASE.write().unwrap() = dir.map(|d| if d.as_os_str().is_empty() { ".".into() } else { d });
+}
+
 impl Scene {
     pub fn load(path: &str) -> Result<Scene, String> {
+        set_base(path);
         let text = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
         let mut s: Scene = serde_json::from_str(&text).map_err(|e| format!("{path}: {e}"))?;
         s.name_all();
@@ -298,12 +319,12 @@ pub fn parts(o: &Object) -> Result<Vec<(Affine, Kind)>, String> {
             None => vec![],
         },
         Shape::Image { file, width, depth, key, detail } => {
-            let px = image::load(file, *key, *detail)?;
+            let px = image::load(&resolve(file), *key, *detail)?;
             vec![(at, Kind::Image { half: v3(width / 2.0, width * px.aspect / 2.0, depth / 2.0), px })]
         }
         Shape::Mesh { file, vertices, faces } => {
             let (vs, fs) = match file {
-                Some(f) => mesh::load(f)?,
+                Some(f) => mesh::load(&resolve(f))?,
                 None => (vertices.clone().unwrap_or_default().into_iter().map(V3::from).collect(), faces.clone().unwrap_or_default()),
             };
             let w: Vec<V3> = vs.iter().map(|v| at.apply(*v)).collect();
