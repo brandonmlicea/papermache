@@ -1,12 +1,27 @@
 //! Paper Mache: 3d model design, via mcp (rust).
+pub mod agentcut;
+pub mod anim;
+pub mod audio;
+pub mod build;
 pub mod bvh;
+pub mod cut;
 pub mod editor;
+pub mod film;
 pub mod geom;
+pub mod gltf;
 pub mod image;
+pub mod light;
 pub mod math;
 pub mod mcp;
 pub mod mesh;
+pub mod model;
+pub mod post;
 pub mod render;
 pub mod scene;
+pub mod shade;
+pub mod shape;
+pub mod studio;
+pub mod subdiv;
 pub mod text;
+pub mod texture;
 pub mod tools;

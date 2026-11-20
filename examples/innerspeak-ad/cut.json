@@ -1,0 +1,32 @@
+{
+ "scene": "ad.json",
+ "song": "pulse.wav",
+ "start_beat": 0,
+ "fps": 30,
+ "shots": [
+  {
+   "name": "lights",
+   "from": 0,
+   "to": 2,
+   "beats": 4
+  },
+  {
+   "name": "turn",
+   "from": 10,
+   "to": 12.5,
+   "beats": 4
+  },
+  {
+   "name": "explode",
+   "from": 20,
+   "to": 22.5,
+   "beats": 4
+  },
+  {
+   "name": "hero",
+   "from": 30,
+   "to": 32,
+   "beats": 4
+  }
+ ]
+}

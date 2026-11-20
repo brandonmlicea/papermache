@@ -14,14 +14,18 @@ pub struct Pixels {
     ch: usize,
 }
 
-fn linear(c: u8) -> f32 {
+pub fn linear(c: u8) -> f32 {
     let c = c as f32 / 255.0;
     if c <= 0.04045 { c / 12.92 } else { ((c + 0.055) / 1.055).powf(2.4) }
 }
 
 fn decode(path: &str) -> Result<(usize, usize, Vec<[u8; 4]>), String> {
-    let f = std::fs::File::open(path).map_err(|e| format!("{path}: {e}"))?;
-    let mut dec = png::Decoder::new(std::io::BufReader::new(f));
+    decode_bytes(&std::fs::read(path).map_err(|e| format!("{path}: {e}"))?, path)
+}
+
+/// RGBA8 pixels of PNG bytes.
+pub fn decode_bytes(bytes: &[u8], path: &str) -> Result<(usize, usize, Vec<[u8; 4]>), String> {
+    let mut dec = png::Decoder::new(std::io::Cursor::new(bytes));
     dec.set_transformations(png::Transformations::normalize_to_color8());
     let mut r = dec.read_info().map_err(|e| format!("{path}: {e}"))?;
     let mut buf = vec![0; r.output_buffer_size()];

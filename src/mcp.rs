@@ -6,7 +6,7 @@ use base64::Engine;
 use serde_json::{json, Map, Value};
 use std::io::{BufRead, Write};
 
-const INSTRUCTIONS: &str = "Paper Mache is a 3D modeling and rendering scene you build with tools. Units are millimetres, Z is up, rotations are degrees (Blender XYZ euler). Start with scene_info (or scene_load a saved scene), add objects with object_add (box with an optional bevel radius, cylinder/cone, sphere, torus, rod, tube, plane, text, image (a .png raised into a solid in its own colours: logos and pixel art), mesh from .obj/.stl), give them materials with material_set, aim with camera_frame or camera_set, then look with render; keep max_size small (about 600-800) while iterating. Save with scene_save and export .obj/.stl with export.";
+const INSTRUCTIONS: &str = "Paper Mache is a 3D modeling, animation and rendering scene you build with tools. Units are millimetres, Z is up, rotations are degrees (Blender XYZ euler). Start with scene_info (or scene_load a saved scene), add objects with object_add (box with a bevel radius, cylinder/cone, sphere, torus, rod, tube, plane, text, image (a .png raised into a solid), lathe (a turned profile, ridges for knurled crowns), extrude (an outline or rounded rectangle with depth, bevel and wall: buttons, bezels, frames), backdrop (a studio sweep), mesh from .obj/.stl/.glb with smooth and subdivide), or import a .glb part by part (import_info lists its nodes). Give them materials with material_set (coat, texture, pattern brushed/spun/noise/gradient/checker, screen playing a frame sequence), light with lights_set and lamp_set (area, spot, point), aim with camera_frame or camera_set (fstop and focus_on for depth of field), animate with keyframe_set and explode, look with render (time picks the moment; keep max_size about 600-800 while iterating), then film the timeline, find a song's beats and cut shots on them. Save with scene_save and export .obj/.stl with export.";
 
 pub struct Server {
     pub scene: Scene,
@@ -213,7 +213,7 @@ impl Server {
                 json!(pts.iter().map(|p| v3a(&json!({"p": p}), "p").map(|p| cam.project(p))).collect::<Vec<_>>())
             }
             "export" => json!(crate::mesh::export(sc, s(a, "path").ok_or("path")?, s(a, "tag"))?),
-            _ => return Err(format!("unknown tool {name}")),
+            _ => return crate::studio::call(&mut self.scene, name, a).unwrap_or(Err(format!("unknown tool {name}"))),
         }))
     }
 
@@ -228,6 +228,7 @@ impl Server {
         let full = sc.camera.size;
         let size = if path.is_some() { full } else { fit(full, Some(max)) };
         let t = std::time::Instant::now();
+        let sc = &crate::anim::at(sc, a.get("time").and_then(Value::as_f64).unwrap_or(0.0))?;
         let c = compile(sc)?;
         let px = render(sc, &c, size, samples);
         if let Some(p) = path {

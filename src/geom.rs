@@ -1,7 +1,18 @@
 use crate::math::*;
 use crate::image::Pixels;
+use crate::scene::Material;
 use crate::text::Mask;
 use std::sync::Arc;
+
+/// A mesh's per-vertex normals and UVs in world space, its faces' materials, and the way back to its own space.
+pub struct Shade {
+    pub n: Vec<V3>,
+    pub uv: Vec<[f64; 2]>,
+    pub f: Vec<[u32; 3]>,
+    pub fm: Vec<u16>,
+    pub mats: Vec<(String, Material)>,
+    pub local: Affine,
+}
 
 /// A shape in its own local space; `Tri` alone is stored in world space.
 #[derive(Clone)]
@@ -14,7 +25,7 @@ pub enum Kind {
     Plane(f64, f64),
     Text { lo: (f64, f64), hi: (f64, f64), mask: Arc<Mask> },
     Image { half: V3, px: Arc<Pixels> },
-    Tri { a: V3, e1: V3, e2: V3, n: V3 },
+    Tri { a: V3, e1: V3, e2: V3, n: V3, sh: Option<(Arc<Shade>, u32)> },
 }
 
 pub struct Prim {
@@ -30,6 +41,7 @@ pub struct Hit {
     pub t: f64,
     pub n: V3,
     pub col: Option<V3>,
+    pub uv: [f64; 2],
 }
 
 impl Kind {
@@ -56,12 +68,12 @@ impl Prim {
     }
 
     pub fn hit(&self, o: V3, d: V3, tmin: f64, tmax: f64) -> Option<Hit> {
-        if let Kind::Tri { a, e1, e2, n } = &self.kind {
-            return tri(o, d, *a, *e1, *e2, tmin, tmax).map(|t| Hit { t, n: *n, col: None });
+        if let Kind::Tri { a, e1, e2, n, .. } = &self.kind {
+            return tri(o, d, *a, *e1, *e2, tmin, tmax).map(|(t, u, v)| Hit { t, n: *n, col: None, uv: [u, v] });
         }
         let (lo, ld) = (self.inv.apply(o), self.inv.dir(d));
         if let Kind::Image { half, px } = &self.kind {
-            return px.hit(lo, ld, *half, tmin, tmax).map(|(t, n, c)| Hit { t, n: self.inv.tdir(n).norm(), col: Some(c) });
+            return px.hit(lo, ld, *half, tmin, tmax).map(|(t, n, c)| Hit { t, n: self.inv.tdir(n).norm(), col: Some(c), uv: [0.0; 2] });
         }
         let (t, n) = match &self.kind {
             Kind::Box(h) => hit_box(lo, ld, *h, tmin, tmax),
@@ -89,7 +101,7 @@ impl Prim {
             }
             Kind::Tri { .. } | Kind::Image { .. } => unreachable!(),
         }?;
-        Some(Hit { t, n: self.inv.tdir(n).norm(), col: None })
+        Some(Hit { t, n: self.inv.tdir(n).norm(), col: None, uv: [0.0; 2] })
     }
 }
 
@@ -190,7 +202,7 @@ fn hit_plane(o: V3, d: V3, tmin: f64, tmax: f64) -> Option<(f64, V3)> {
     (t > tmin && t < tmax).then_some((t, v3(0.0, 0.0, 1.0)))
 }
 
-fn tri(o: V3, d: V3, a: V3, e1: V3, e2: V3, tmin: f64, tmax: f64) -> Option<f64> {
+fn tri(o: V3, d: V3, a: V3, e1: V3, e2: V3, tmin: f64, tmax: f64) -> Option<(f64, f64, f64)> {
     let p = d.cross(e2);
     let det = e1.dot(p);
     if det.abs() < 1e-300 {
@@ -208,7 +220,7 @@ fn tri(o: V3, d: V3, a: V3, e1: V3, e2: V3, tmin: f64, tmax: f64) -> Option<f64>
         return None;
     }
     let t = e2.dot(q) * inv;
-    (t > tmin && t < tmax).then_some(t)
+    (t > tmin && t < tmax).then_some((t, u, v))
 }
 
 /// Sphere tracing a signed distance inside the shape's bounds, for bevels and tori.

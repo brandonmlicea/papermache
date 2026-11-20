@@ -1,0 +1,2339 @@
+{
+ "materials": {
+  "cyc": {
+   "color": [
+    0.018,
+    0.018,
+    0.02
+   ],
+   "roughness": 0.55
+  },
+  "hud": {
+   "color": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "roughness": 0.08,
+   "opacity": 0.6,
+   "screen": {
+    "file": "screen/frame_%05d.png",
+    "fps": 30,
+    "start": 30,
+    "count": 60,
+    "strength": 2.2
+   }
+  },
+  "dotL0": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  },
+  "dotL1": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  },
+  "dotL2": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  },
+  "dotR0": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  },
+  "dotR1": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  },
+  "dotR2": {
+   "color": [
+    0.012,
+    0.016,
+    0.03
+   ],
+   "roughness": 0.3,
+   "emission": [
+    0.0004,
+    0.012,
+    0.045
+   ]
+  }
+ },
+ "objects": [
+  {
+   "name": "cyc",
+   "shape": "backdrop",
+   "size": [
+    900,
+    700,
+    450
+   ],
+   "radius": 170,
+   "position": [
+    0,
+    120,
+    0
+   ],
+   "material": "cyc"
+  },
+  {
+   "name": "front_frame",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "front_frame",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "front_lens",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "front_lens",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "front_metal",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "front_metal",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "front_pad",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "front_pad",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "front_antenna",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "front_antenna",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_frame",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_frame",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_tip",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_tip",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_metal",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_metal",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_battery",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_battery",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_pcb",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_pcb",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_chip",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_chip",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_speaker",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_speaker",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armL_dot0",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_dot0",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotL0"
+  },
+  {
+   "name": "armL_dot1",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_dot1",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotL1"
+  },
+  {
+   "name": "armL_dot2",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armL_dot2",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotL2"
+  },
+  {
+   "name": "armR_frame",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_frame",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_tip",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_tip",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_metal",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_metal",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_battery",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_battery",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_pcb",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_pcb",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_chip",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_chip",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_speaker",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_speaker",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ]
+  },
+  {
+   "name": "armR_dot0",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_dot0",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotR0"
+  },
+  {
+   "name": "armR_dot1",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_dot1",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotR1"
+  },
+  {
+   "name": "armR_dot2",
+   "shape": "mesh",
+   "file": "glasses.glb",
+   "node": "armR_dot2",
+   "scale": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "pivot": [
+    0,
+    774,
+    0
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "tags": [
+    "glasses"
+   ],
+   "material": "dotR2"
+  },
+  {
+   "name": "hud",
+   "shape": "plane",
+   "size": [
+    26,
+    13
+   ],
+   "rotation": [
+    90,
+    0,
+    0
+   ],
+   "pivot": [
+    32,
+    0,
+    -79.6
+   ],
+   "position": [
+    0,
+    0,
+    22.5
+   ],
+   "material": "hud",
+   "hidden": true
+  }
+ ],
+ "camera": {
+  "eye": [
+   148,
+   -64,
+   60
+  ],
+  "look": [
+   65.5,
+   -52,
+   36
+  ],
+  "lens": 100,
+  "size": [
+   1920,
+   1080
+  ]
+ },
+ "lights": {
+  "sun": {
+   "strength": 0
+  },
+  "sky": {
+   "color": [
+    1,
+    1,
+    1
+   ],
+   "strength": 0.03
+  },
+  "background": [
+   0.004,
+   0.004,
+   0.005
+  ],
+  "lamps": [
+   {
+    "name": "key",
+    "kind": "area",
+    "position": [
+     -70,
+     -170,
+     230
+    ],
+    "look": [
+     0,
+     -20,
+     20
+    ],
+    "size": [
+     240,
+     130
+    ],
+    "strength": 4
+   },
+   {
+    "name": "rimL",
+    "kind": "area",
+    "position": [
+     -230,
+     140,
+     70
+    ],
+    "look": [
+     0,
+     -30,
+     25
+    ],
+    "size": [
+     36,
+     280
+    ],
+    "strength": 6,
+    "color": [
+     0.72,
+     0.84,
+     1
+    ]
+   },
+   {
+    "name": "rimR",
+    "kind": "area",
+    "position": [
+     230,
+     140,
+     70
+    ],
+    "look": [
+     0,
+     -30,
+     25
+    ],
+    "size": [
+     36,
+     280
+    ],
+    "strength": 6,
+    "color": [
+     0.72,
+     0.84,
+     1
+    ]
+   },
+   {
+    "name": "side",
+    "kind": "area",
+    "position": [
+     150,
+     -20,
+     95
+    ],
+    "look": [
+     65,
+     -44,
+     36
+    ],
+    "size": [
+     90,
+     60
+    ],
+    "strength": 2.2
+   }
+  ]
+ },
+ "render": {
+  "samples": 24,
+  "noise": 0.01,
+  "denoise": true,
+  "bloom": 0.35,
+  "filmic": true,
+  "fps": 30
+ },
+ "timeline": [
+  {
+   "path": "materials.dotL0.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 0.3,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 0.48,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "materials.dotL1.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 0.8,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 0.98,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "materials.dotL2.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 1.3,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 1.48,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "materials.dotR0.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 0.3,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 0.48,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "materials.dotR1.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 0.8,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 0.98,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "materials.dotR2.emission",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ]
+    },
+    {
+     "t": 1.3,
+     "v": [
+      0.0004,
+      0.012,
+      0.045
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 1.48,
+     "v": [
+      0.012,
+      1.0,
+      3.8
+     ]
+    }
+   ]
+  },
+  {
+   "path": "camera.eye",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      148,
+      -64,
+      60
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 1.999,
+     "v": [
+      148,
+      -30,
+      58
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": [
+      -200,
+      -270,
+      125
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20,
+     "v": [
+      -150,
+      -300,
+      250
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 22.5,
+     "v": [
+      -130,
+      -265,
+      225
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 30,
+     "v": [
+      105,
+      -340,
+      100
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 32,
+     "v": [
+      80,
+      -290,
+      84
+     ]
+    }
+   ]
+  },
+  {
+   "path": "camera.look",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      65.5,
+      -52,
+      36
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 1.999,
+     "v": [
+      65.5,
+      -36,
+      36
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": [
+      0,
+      -20,
+      20
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20,
+     "v": [
+      10,
+      10,
+      22
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 30,
+     "v": [
+      -2,
+      -30,
+      22
+     ]
+    }
+   ]
+  },
+  {
+   "path": "camera.lens",
+   "keys": [
+    {
+     "t": 0,
+     "v": 100,
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": 52,
+     "ease": "step"
+    },
+    {
+     "t": 20,
+     "v": 44,
+     "ease": "step"
+    },
+    {
+     "t": 30,
+     "v": 60
+    }
+   ]
+  },
+  {
+   "path": "camera.fstop",
+   "keys": [
+    {
+     "t": 0,
+     "v": 4,
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": 8,
+     "ease": "step"
+    },
+    {
+     "t": 20,
+     "v": 11,
+     "ease": "step"
+    },
+    {
+     "t": 30,
+     "v": 6.3
+    }
+   ]
+  },
+  {
+   "path": "camera.focus_on",
+   "keys": [
+    {
+     "t": 0,
+     "v": "armL_dot1",
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": "front_frame"
+    }
+   ]
+  },
+  {
+   "path": "objects.tag:glasses.rotation",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      0
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": [
+      0,
+      0,
+      -38
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 12.5,
+     "v": [
+      0,
+      0,
+      38
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20,
+     "v": [
+      0,
+      0,
+      0
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 30,
+     "v": [
+      0,
+      0,
+      18
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 32,
+     "v": [
+      0,
+      0,
+      12
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.hud.rotation",
+   "keys": [
+    {
+     "t": 30,
+     "v": [
+      90,
+      0,
+      18
+     ],
+     "ease": "out"
+    },
+    {
+     "t": 32,
+     "v": [
+      90,
+      0,
+      12
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.hud.hidden",
+   "keys": [
+    {
+     "t": 0,
+     "v": true,
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": false
+    }
+   ]
+  },
+  {
+   "path": "materials.cyc.color",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.018,
+      0.018,
+      0.02
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": [
+      0.7,
+      0.7,
+      0.68
+     ]
+    }
+   ]
+  },
+  {
+   "path": "lights.background",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0.004,
+      0.004,
+      0.005
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": [
+      0.72,
+      0.72,
+      0.7
+     ]
+    }
+   ]
+  },
+  {
+   "path": "lights.sky.strength",
+   "keys": [
+    {
+     "t": 0,
+     "v": 0.03,
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": 0.45
+    }
+   ]
+  },
+  {
+   "path": "lights.lamps.key.strength",
+   "keys": [
+    {
+     "t": 0,
+     "v": 4,
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": 9,
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": 16
+    }
+   ]
+  },
+  {
+   "path": "lights.lamps.side.strength",
+   "keys": [
+    {
+     "t": 0,
+     "v": 2.2,
+     "ease": "step"
+    },
+    {
+     "t": 10,
+     "v": 0
+    }
+   ]
+  },
+  {
+   "path": "lights.lamps.rimL.strength",
+   "keys": [
+    {
+     "t": 0,
+     "v": 6,
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": 2
+    }
+   ]
+  },
+  {
+   "path": "lights.lamps.rimR.strength",
+   "keys": [
+    {
+     "t": 0,
+     "v": 6,
+     "ease": "step"
+    },
+    {
+     "t": 19.9,
+     "v": 2
+    }
+   ]
+  },
+  {
+   "path": "objects.front_lens.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      -36.4,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.front_pad.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      -14.0,
+      2.900000000000002
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.front_antenna.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      -19.599999999999998,
+      53.3
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.front_metal.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      11.2,
+      58.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_tip.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      42.0,
+      14.100000000000001
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_metal.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      16.799999999999997,
+      0.0,
+      42.099999999999994
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_battery.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      42.0,
+      19.599999999999998,
+      19.7
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_pcb.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_chip.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      47.599999999999994,
+      0.0,
+      58.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_speaker.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      36.4,
+      5.6,
+      2.900000000000002
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_dot0.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_dot1.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armL_dot2.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_tip.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      0.0,
+      42.0,
+      14.100000000000001
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_metal.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -16.799999999999997,
+      0.0,
+      42.099999999999994
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_battery.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -42.0,
+      19.599999999999998,
+      19.7
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_pcb.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_chip.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -47.599999999999994,
+      0.0,
+      58.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_speaker.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -36.4,
+      5.6,
+      2.900000000000002
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_dot0.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_dot1.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  },
+  {
+   "path": "objects.armR_dot2.position",
+   "keys": [
+    {
+     "t": 0,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 20.25,
+     "v": [
+      0,
+      0,
+      22.5
+     ],
+     "ease": "inout"
+    },
+    {
+     "t": 21.5,
+     "v": [
+      -30.799999999999997,
+      0.0,
+      44.9
+     ],
+     "ease": "step"
+    },
+    {
+     "t": 29.9,
+     "v": [
+      0,
+      0,
+      22.5
+     ]
+    }
+   ]
+  }
+ ]
+}
